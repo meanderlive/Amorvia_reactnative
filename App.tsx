@@ -17,18 +17,18 @@ const AppInit = () => {
   const dispatch = useDispatch();
   const init = async () => {
     try {
-      // const localAuthData = await getLocalUser();
-      // const isFirstTimeOpenData = await AsyncStorage.getItem(
-      //   LOCAL_KEYS.IS_FIRST_TIME_OPEN,
-      // );
-      // console.log({
-      //   localAuthData,
-      //   isFirstTimeOpenData: !Boolean(isFirstTimeOpenData),
-      // });
-      // if (localAuthData) {
-      //   dispatch(setAuth(localAuthData));
-      // }
-      // setIsFirstTimeOpen(!Boolean(isFirstTimeOpenData));
+      const localAuthData = await getLocalUser();
+      const isFirstTimeOpenData = await AsyncStorage.getItem(
+        LOCAL_KEYS.IS_FIRST_TIME_OPEN,
+      );
+      console.log({
+        localAuthData,
+        isFirstTimeOpenData: !Boolean(isFirstTimeOpenData),
+      });
+      if (localAuthData) {
+        dispatch(setAuth(localAuthData));
+      }
+      setIsFirstTimeOpen(!Boolean(isFirstTimeOpenData));
     } catch (err) {
       console.log(err);
     } finally {

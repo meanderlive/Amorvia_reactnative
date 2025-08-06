@@ -39,10 +39,10 @@ const BasicGuidelinesScreen = () => {
           />
           <MediumText>Swipe left on profiles you dislike</MediumText>
 
-          <Image
+          {/* <Image
             style={{marginTop: 10}}
             source={require('../../../../assets/logo/dislikeLogos.png')}
-          />
+          /> */}
           <MediumText>Tap to see profile photos</MediumText>
           <Image
             style={{marginTop: 15}}
