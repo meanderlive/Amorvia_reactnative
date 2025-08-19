@@ -25,22 +25,121 @@ export type RootStackParams = {
   // Dating Screens
 
   Login: undefined;
-  CodeVerify: undefined;
-  Welcome: undefined;
+  CodeVerify: {
+    otp: string;    // OTP received from API
+    token: string;  // Auth token
+  };
+  Welcome: {
+    finalPayload: {
+      userName: string;
+      email: string;
+      password: any;
+      confirmPassword: string;
+      status: string;
+      subscription: boolean;
+      phoneNumber: string;
+      mode: string;
+      name: string;
+      FathersName: string;
+      MothersName: string;
+      age: number;
+      dob: any;
+      iAm: string;
+      looking: string;
+      marital: string;
+      SmokingandDrinkingHabits: string;
+      address: string;
+      description: string;
+      interest: string[];
+      createdProfileFor: string;
+      horoscopes: string;
+      motherTongue: string;
+      Height: string;
+      Weight: string;
+      occupation: string;
+      createdBy: string;
+      salary: string;
+      DietPreferences: string;
+      birthPlace: string;
+      NumberofSiblings: string;
+      workingExperience: string;
+      familyStatus: string;
+      FamilyBackground: string;
+      education: string;
+      Religion: string;
+      Caste: string;
+      FathersStatus: string;
+      MothersStatus: string;
+      NumberOfBrother: string;
+      NoOfMarriedBrother: string;
+      NumberOfSister: string;
+      NoOfMarriedSister: string;
+      CompanyName: string;
+      HighestQualification: string;
+      CollageName: string;
+      bio: string;
+      community: string;
+      Matches: boolean;
+      Messages: boolean;
+      Promotional: boolean;
+      manglikStatus: boolean;
+    };
+  };
   PersonalDetails: {user: any; accessToken: any};
   // AddPhoto: {user: any; accessToken: any};
   // Interest: {user: any; accessToken: any};
-  Interest: undefined;
+  Interest: {
+    moreNewPayload: {
+      fullname: string;
+      dob: any;
+      gender: string;
+      height: string;
+      Country: string;
+      email: string;
+      password: any;
+      confirmPassword: string;
+    };
+  };
   AddPhoto: undefined;
   MainTab: undefined;
   MainTabMat: undefined;
   WelcomeStack: undefined;
   BasicGuidelines: undefined;
   CreateAccount: undefined;
-  ContactDetail: undefined;
+  ContactDetail: {
+    payload: {
+      fullname: string;
+      dob: any;
+      gender: string;
+      height: string;
+      Country: string;
+    };
+  };
   VerifyOtpTwo: undefined;
-  CareerDetail: undefined;
-  AlmostDone: undefined;
+  CareerDetail: {
+    newPayload: {
+      fullname: string;
+      dob: any;
+      gender: string;
+      height: string;
+      Country: string;
+      email: string;
+      password: any;
+      confirmPassword: string;
+    };
+  };
+  AlmostDone: {
+    newPayload: {
+      fullname: string;
+      dob: any;
+      gender: string;
+      height: string;
+      Country: string;
+      email: string;
+      password: any;
+      confirmPassword: string;
+    };
+  };
 };
 
 export type MainTabNavigatorParams = {

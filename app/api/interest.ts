@@ -21,16 +21,15 @@ export const api_getAllInterests = async (token:string) => {
   };
   
 
-// GET ALL INTERESTS BY ID-> GET
+// GET ALL INTERESTS BY MODE ID-> GET
 
-export const api_getInterestsById = async (interests:any, token:string) => {
-    const uri = `${BASE_URL}/interests/getById/${interests}`;
+export const api_getInterestsByModeId = async (modeId: string, pageNo: number = 1, pageSize: number = 50) => {
+    const uri = `${BASE_URL}/interest/getall/${modeId}?page_no=${pageNo}&page_size=${pageSize}`;
     
     const response = await fetch(uri, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "x-access-token": token,
       },
     }).then((res) => res.json());
     if (!response.isSuccess) {

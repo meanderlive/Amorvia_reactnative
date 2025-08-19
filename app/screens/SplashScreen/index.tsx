@@ -11,7 +11,7 @@ const SplashScreen = () => {
     <View style={{flex: 1}}>
       <View style={{height: '100%', width: '100%'}}>
         <Image
-          style={{height: '100%', width: '100%'}}
+          style={{height: '100%', width: '100%', resizeMode: 'cover'}}
           source={require('../../../assets/images/Splash.png')}
         />
       </View>

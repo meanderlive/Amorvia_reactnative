@@ -12,7 +12,7 @@ export interface authState {
 const initialState: authState = {
     user: null,
     accessToken: null,
-    mode: AppMode.Dating,
+    mode: null,
 }
 
 export const authSlice = createSlice({
@@ -38,7 +38,9 @@ export const authSlice = createSlice({
         destroyLocalStorage();
       },
       changeAppMode: (state, action) => {
+        console.log('changeAppMode reducer called with payload:', action.payload);
         state.mode = action.payload;
+        console.log('Mode updated in state:', state.mode);
       },
   },
 })
@@ -48,6 +50,7 @@ export const authSlice = createSlice({
 export const {setAuth, updateUser, logOut,changeAppMode } = authSlice.actions
 export const tokenSelector = (s: any) => s.auth.accessToken;
 export const authSelector = (s: any) => s.auth.user;
+export const modeSelector = (s: any) => s.auth.mode;
 
 
 export default authSlice.reducer

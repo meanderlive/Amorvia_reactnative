@@ -1,7 +1,7 @@
 import {View, Text} from 'react-native';
 import React from 'react';
 import MainLayout from '../../../components/MainLayout';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigation/types';
 import PrimaryBtn from '../../../components/PrimaryBtn';
@@ -10,6 +10,9 @@ import {BigText, MediumText, RegularText} from '../../../components/MyText';
 const AlmostDoneScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const route = useRoute<RouteProp<RootStackParams, 'AlmostDone'>>();
+  const { newPayload } = route.params;
+  console.log(JSON.stringify(newPayload),"payload of almost done");
   return (
     <MainLayout onBack={navigation.goBack}>
       <View style={{flex: 1}}>
@@ -25,7 +28,7 @@ const AlmostDoneScreen = () => {
           </Text>
         </View>
         <PrimaryBtn
-          onPress={() => navigation.navigate('CareerDetail')}
+          onPress={() => navigation.navigate('CareerDetail', { newPayload })}
           text="Next"
           containerStyle={{marginBottom: 40, marginHorizontal: 20}}
         />

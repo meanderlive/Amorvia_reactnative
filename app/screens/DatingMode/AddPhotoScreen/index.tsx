@@ -2,7 +2,7 @@ import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useState} from 'react';
 import MainLayout from '../../../components/MainLayout';
 import PrimaryBtn from '../../../components/PrimaryBtn';
-import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {RegularText} from '../../../components/MyText';
 import AddBtn from '../../../components/AddBtn';
 import ImagePickerModal from '../../../modals/ImagePickerModal';
@@ -13,6 +13,10 @@ import {COLORS} from '../../../styles';
 
 const ImagePlaceholder = ({onImageSelect, image}: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+
+
+ 
 
   return image ? (
     <Image
@@ -62,13 +66,17 @@ const AddPhotoScreen = () => {
     null,
   ]);
 
+  const route = useRoute<RouteProp<RootStackParams, 'AddPhoto'>>();
+  const { moreNewPayload } = route.params;
+  console.log(JSON.stringify(moreNewPayload),"payload of add photo");
+
   console.log(selectedImages);
 
   const dispatch = useDispatch();
 
   const handleSubmit = async () => {
     // dispatch(setAuth({...user, token: accessToken}));
-    navigation.navigate('Interest');
+    navigation.navigate('Interest',{ moreNewPayload });
   };
   return (
     <MainLayout title="Add Photos" onBack={navigation.goBack}>

@@ -1,33 +1,49 @@
-import {StyleSheet, View, TouchableOpacity, ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+} from 'react-native';
+import React, { useState } from 'react';
 import MainLayout from '../../../components/MainLayout';
-import {BigText, RegularText, SmallText} from '../../../components/MyText';
-import {useNavigation, useRoute} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {RootStackParams} from '../../../navigation/types';
+import { BigText, RegularText, SmallText } from '../../../components/MyText';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParams } from '../../../navigation/types';
 import PrimaryBtn from '../../../components/PrimaryBtn';
-import {COLORS} from '../../../styles';
+import { COLORS } from '../../../styles';
 import OtpInputs from 'react-native-otp-inputs';
-import {useDispatch} from 'react-redux';
-import {setAuth} from '../../../redux/feature/auth/authSlice';
+import { useDispatch } from 'react-redux';
+import { setAuth } from '../../../redux/feature/auth/authSlice';
+import { api_otpVerify } from '../../../api/auth';
 
 const CodeVerifyScreen = () => {
   const [loading, setLoading] = React.useState(false);
-  const [otp, setOtp] = useState('');
   const params = useRoute<any>().params;
   const dispatch = useDispatch();
+  const [screenOtp, setscreenOtp] = useState('');
+  const { otp, token } = useRoute<any>().params;
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
-  const handleVerifyOtp = async () => {
-    dispatch(
-      setAuth({
-        name: 'GHOST',
-        token: 'GHOST_TOKEN',
-      }),
-    );
-  };
 
+  const handleVerifyOtp = async () => {
+    setLoading(true);
+
+    try {
+      console.log('Verifying OTP...');
+      const res = await api_otpVerify(screenOtp, token);
+      console.log('Login OTP API response:', res);
+      navigation.navigate('Welcome');
+      Alert.alert('Success', 'OTP verified successfully!');
+    } catch (error: any) {
+      console.log(error);
+      Alert.alert('Error', error.message || 'Something went wrong!');
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <MainLayout onBack={navigation.goBack} title="My Code is">
       <>
@@ -48,7 +64,7 @@ const CodeVerifyScreen = () => {
               borderRadius: 10,
               marginTop: 20,
             }}
-            handleChange={code => setOtp(code)}
+            handleChange={code => setscreenOtp(code)}
             numberOfInputs={4}
           />
           <RegularText
@@ -59,7 +75,8 @@ const CodeVerifyScreen = () => {
               marginBottom: 40,
               color: COLORS.grey,
               width: 230,
-            }}>
+            }}
+          >
             Please enter the 4-digit code sent to you at +91 9876543210
           </RegularText>
           <TouchableOpacity
@@ -72,16 +89,19 @@ const CodeVerifyScreen = () => {
               alignSelf: 'center',
               borderWidth: 1,
               borderColor: COLORS.secondary,
-            }}>
-            <RegularText style={{color: COLORS.secondary}}>Resend</RegularText>
+            }}
+          >
+            <RegularText style={{ color: COLORS.secondary }}>
+              Resend
+            </RegularText>
           </TouchableOpacity>
         </ScrollView>
-        <View style={{marginBottom: 20}}>
+        <View style={{ marginBottom: 20 }}>
           <PrimaryBtn
             onPress={handleVerifyOtp}
             text={'Submit'}
             loading={loading}
-            containerStyle={{marginHorizontal: 20, marginBottom: 30}}
+            containerStyle={{ marginHorizontal: 20, marginBottom: 30 }}
           />
         </View>
       </>

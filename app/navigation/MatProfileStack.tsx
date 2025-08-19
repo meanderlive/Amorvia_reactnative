@@ -1,6 +1,6 @@
 import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {MatProfileStackParams, ProfileStackParams} from './types';
+import {MatProfileStackParams} from './types';
 import AccountScreen from '../screens/MatrimonyMode/AccountScreen';
 import AccountSettingScreen from '../screens/MatrimonyMode/AccountSettingScreen';
 import NotificationScreen from '../screens/MatrimonyMode/NotificationScreen';
@@ -24,7 +24,6 @@ import AstroServicesScreen from '../screens/MatrimonyMode/AstroServices';
 import WeddingVenueScreen from '../screens/MatrimonyMode/WeddingVenueScreen';
 import WeddingShootScreen from '../screens/MatrimonyMode/WeddingShootScreen';
 import WeddingDecorScreen from '../screens/MatrimonyMode/WeddingDecorScreen';
-import WeddingMusicScreen from '../screens/MatrimonyMode/WeddingMusicScree.';
 import WeddingDressScreen from '../screens/MatrimonyMode/WeddingDressScreen';
 import WeddingCakeScreen from '../screens/MatrimonyMode/WeddingCakeScreen';
 import DressDetailScreen from '../screens/MatrimonyMode/DressDetailScreen';
@@ -35,6 +34,7 @@ import DeleteProfileScreen from '../screens/MatrimonyMode/DeleteProfileScreen';
 import HideProfileScreen from '../screens/MatrimonyMode/HideProfileScreen';
 import EditEduCareerScreen from '../screens/MatrimonyMode/EditEduCareer';
 import EditFamilyDetailScreen from '../screens/MatrimonyMode/EditFamilyDetails';
+import WeddingMusicScreen from '../screens/MatrimonyMode/WeddingMusicScree';
 
 const Stack = createNativeStackNavigator<MatProfileStackParams>();
 const MatProfileStack = () => {
