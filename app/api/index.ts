@@ -1,7 +1,7 @@
 
 
 
-export const BASE_URL: string = 'https://datingapi.meander.software';
+export const BASE_URL: string = 'https://datingapi.meander.software/';
 
 
 

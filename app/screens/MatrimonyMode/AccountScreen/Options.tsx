@@ -37,9 +37,17 @@ const Row = ({text, icon, onPress}: RowProps) => {
   );
 };
 
+import { useSelector } from 'react-redux';
+
 const Options = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<MatProfileStackParams>>();
+  const navigation = useNavigation<NativeStackNavigationProp<MatProfileStackParams>>();
+  const user = useSelector((s: any) => s.auth.user);
+  // Normalize user data
+  const normalized = {
+    familyMembers: user?.familyMembers || user?.family || [],
+    subscription: user?.subscription ?? false,
+    isPremium: user?.subscription === true || user?.isPremium === true,
+  };
   return (
     <View style={{alignItems: 'center', marginTop: 20}}>
       <Row
@@ -57,18 +65,22 @@ const Options = () => {
         icon={() => <MaterialIcons name="settings" size={24} color="gray" />}
         text="Account Settings"
       />
-      <Row
-        icon={() => (
-          <MaterialIcons name="family-restroom" size={22} color="gray" />
-        )}
-        text="My Family Members"
-      />
-      <Row
-        //@ts-ignore
-        onPress={() => navigation.navigate('PremiumTab')}
-        icon={() => <Entypo name="back-in-time" size={22} color="gray" />}
-        text="Subscription"
-      />
+      {normalized.familyMembers.length > 0 && (
+        <Row
+          icon={() => (
+            <MaterialIcons name="family-restroom" size={22} color="gray" />
+          )}
+          text={`My Family Members (${normalized.familyMembers.length})`}
+        />
+      )}
+      {normalized.isPremium && (
+        <Row
+          //@ts-ignore
+          onPress={() => navigation.navigate('PremiumTab')}
+          icon={() => <Entypo name="back-in-time" size={22} color="gray" />}
+          text="Subscription"
+        />
+      )}
       <Row
         onPress={() => navigation.navigate('Notification')}
         icon={() => <FontAwesome name="bell" size={22} color="gray" />}

@@ -16,5 +16,6 @@ const COLORS = {
   blue: '#3141ad',
   lightBlue: '#0096ED',
   purple: '#D6B6F9',
+  error:"red"
 };
 export {globalStyles, COLORS};

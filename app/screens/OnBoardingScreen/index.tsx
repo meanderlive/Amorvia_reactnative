@@ -65,7 +65,7 @@ const OnBoardingScreen = () => {
         data={['one', 'two', 'three']}
         renderItem={({item}) => {
           return (
-            <View style={{flex: 1}}>
+            <View style={{flex: 1, width}}>
               {item === 'one' && (
                 <BoardOne handleSkip={handleSkip} handleNext={handleNext} />
               )}

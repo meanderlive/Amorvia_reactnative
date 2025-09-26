@@ -19,8 +19,8 @@ export type RootStackParams = {
   SubmitId: undefined;
   PartnerPref: undefined;
   InterestMat: undefined;
-  AddPhotoMat: undefined;
-  // AddPhoto: {user: any; accessToken: any};
+  AddPhotoMat: { interests: string[] };
+  // AddPhoto: {user: User; accessToken: string};
 
   // Dating Screens
 
@@ -33,7 +33,7 @@ export type RootStackParams = {
     finalPayload: {
       userName: string;
       email: string;
-      password: any;
+      password: string;
       confirmPassword: string;
       status: string;
       subscription: boolean;
@@ -43,7 +43,7 @@ export type RootStackParams = {
       FathersName: string;
       MothersName: string;
       age: number;
-      dob: any;
+      dob: string | Date;
       iAm: string;
       looking: string;
       marital: string;
@@ -84,19 +84,20 @@ export type RootStackParams = {
       Promotional: boolean;
       manglikStatus: boolean;
     };
+    res?: any
   };
-  PersonalDetails: {user: any; accessToken: any};
-  // AddPhoto: {user: any; accessToken: any};
-  // Interest: {user: any; accessToken: any};
+  PersonalDetails: {user: User; accessToken: string};
+  // AddPhoto: {user: User; accessToken: string};
+  // Interest: {user: User; accessToken: string};
   Interest: {
     moreNewPayload: {
       fullname: string;
-      dob: any;
+      dob: string | Date;
       gender: string;
       height: string;
       Country: string;
       email: string;
-      password: any;
+      password: string;
       confirmPassword: string;
     };
   };
@@ -104,12 +105,12 @@ export type RootStackParams = {
   MainTab: undefined;
   MainTabMat: undefined;
   WelcomeStack: undefined;
-  BasicGuidelines: undefined;
+  BasicGuidelines: {userName: string; token: string};
   CreateAccount: undefined;
   ContactDetail: {
     payload: {
       fullname: string;
-      dob: any;
+      dob: string | Date;
       gender: string;
       height: string;
       Country: string;
@@ -119,28 +120,34 @@ export type RootStackParams = {
   CareerDetail: {
     newPayload: {
       fullname: string;
-      dob: any;
+      dob: string | Date;
       gender: string;
       height: string;
       Country: string;
       email: string;
-      password: any;
+      password: string;
       confirmPassword: string;
     };
   };
   AlmostDone: {
     newPayload: {
       fullname: string;
-      dob: any;
+      dob: string | Date;
       gender: string;
       height: string;
       Country: string;
       email: string;
-      password: any;
+      password: string;
       confirmPassword: string;
     };
   };
 };
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
 
 export type MainTabNavigatorParams = {
   //Dating Tabs

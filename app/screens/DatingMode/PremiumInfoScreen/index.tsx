@@ -6,19 +6,18 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {PremiumStackParams, RootStackParams} from '../../../navigation/types';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { PremiumStackParams, RootStackParams } from '../../../navigation/types';
 import MainLayout from '../../../components/MainLayout';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   BigText,
   MediumText,
   RegularText,
-  RegularTextG,
   SmallText,
 } from '../../../components/MyText';
-import {COLORS} from '../../../styles';
+import { COLORS } from '../../../styles';
 
 const data = [
   {
@@ -55,9 +54,9 @@ const PremiumScreen = () => {
     useNavigation<NativeStackNavigationProp<PremiumStackParams>>();
   return (
     <MainLayout title="Upgrade to Premium" onBack={navigation.goBack}>
-      <ScrollView style={{flex: 1}}>
+      <ScrollView style={{ flex: 1 }}>
         <View
-          style={{alignItems: 'center', paddingHorizontal: 49, marginTop: 30}}>
+          style={{ alignItems: 'center', paddingHorizontal: 49, marginTop: 30 }}>
           <BigText bold>Choose your plan</BigText>
           {/* <RegularTextG
             style={{
@@ -73,16 +72,16 @@ const PremiumScreen = () => {
           showsHorizontalScrollIndicator={false}
           data={data}
           horizontal
-          renderItem={({item}) => {
+          renderItem={({ item }) => {
             return (
               <View style={styles.flatList}>
                 <View style={styles.titleView}>
-                  <SmallText bold style={{color: 'white'}}>
+                  <SmallText bold style={{ color: 'white' }}>
                     {item.title}
                   </SmallText>
                 </View>
-                <View style={{flexDirection: 'row', marginBottom: 10}}>
-                  <BigText style={{color: 'white'}} bold>
+                <View style={{ flexDirection: 'row', marginBottom: 10 }}>
+                  <BigText style={{ color: 'white' }} bold>
                     {item.price}
                   </BigText>
                   <MediumText
@@ -94,7 +93,7 @@ const PremiumScreen = () => {
                     /{item.duration}
                   </MediumText>
                 </View>
-                <RegularText style={{color: 'white', textAlign: 'center'}}>
+                <RegularText style={{ color: 'white', textAlign: 'center' }}>
                   {item.per_month}
                 </RegularText>
 
@@ -109,7 +108,7 @@ const PremiumScreen = () => {
                       color="white"
                     />
 
-                    <RegularText style={{color: 'white'}}>
+                    <RegularText style={{ color: 'white' }}>
                       {item.des1}
                     </RegularText>
                   </View>
@@ -120,7 +119,7 @@ const PremiumScreen = () => {
                       size={24}
                       color="white"
                     />
-                    <RegularText style={{color: 'white'}}>
+                    <RegularText style={{ color: 'white' }}>
                       {item.des2}
                     </RegularText>
                   </View>
@@ -131,7 +130,7 @@ const PremiumScreen = () => {
                       size={24}
                       color="white"
                     />
-                    <RegularText style={{color: 'white'}}>
+                    <RegularText style={{ color: 'white' }}>
                       {item.des3}
                     </RegularText>
                   </View>
@@ -155,7 +154,7 @@ const PremiumScreen = () => {
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Payment')}
                   style={styles.button}>
-                  <RegularText style={{color: 'white'}} bold>
+                  <RegularText style={{ color: 'white' }} bold>
                     Choose Plan
                   </RegularText>
                 </TouchableOpacity>
@@ -163,7 +162,7 @@ const PremiumScreen = () => {
             );
           }}
         />
-        <View style={{height: 80}}></View>
+        <View style={{ height: 80 }}></View>
       </ScrollView>
     </MainLayout>
   );

@@ -23,116 +23,75 @@ const Row = ({text, title}: RowProps) => {
   );
 };
 
-const interest = [
-  {type: 'Painting'},
-  {type: 'Dancing'},
-  {type: 'Travelling'},
-  {type: 'Sports'},
-  {type: 'Running'},
-];
-const About = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<MatProfileStackParams>>();
+const About = ({ user }: { user: any }) => {
+  const navigation = useNavigation<NativeStackNavigationProp<MatProfileStackParams>>();
   return (
     <View style={{marginHorizontal: 20}}>
-      {/* {ABOUT} */}
+      {/* About Section */}
       <View style={styles.row}>
         <RegularText bold>About</RegularText>
-        <Octicons
-          onPress={() => navigation.navigate('EditProfile')}
-          name="pencil"
-          size={20}
-          color="gray"
-        />
+        <Octicons onPress={() => navigation.navigate('EditProfile')} name="pencil" size={20} color="gray" />
       </View>
       <RegularTextG style={{marginRight: 22, marginBottom: 10}}>
-        It is a long established fact that a reader will be distracted by the
-        readable content of a page when looking at its layout. The point of
-        using Lorem Ipsum is that it has a more-or-less normal distribution of
-        letters, as opposed to using 'Content here, content here',
+        {user?.bio || user?.description || user?.aboutMe || 'No bio available.'}
       </RegularTextG>
 
-      {/* {BD} */}
+      {/* Basic Details Section */}
       <View style={styles.row}>
         <RegularText bold>Basic Details</RegularText>
-        <Octicons
-          onPress={() => navigation.navigate('EditBasicDetails')}
-          name="pencil"
-          size={20}
-          color="gray"
-        />
+        <Octicons onPress={() => navigation.navigate('EditBasicDetails')} name="pencil" size={20} color="gray" />
       </View>
       <View>
-        <Row title="Name" text="John Doe" />
-        <Row title="Date of Birth" text="August 19, 1999" />
-        <Row title="Gender" text="Male" />
-        <Row title="Marital Status" text="Single" />
+        <Row title="Name" text={user?.name || user?.userName || user?.fullName || 'N/A'} />
+        <Row title="Date of Birth" text={user?.dob || user?.dateOfBirth || 'N/A'} />
+        <Row title="Gender" text={user?.gender || user?.iAm || 'N/A'} />
+        <Row title="Marital Status" text={user?.marital || user?.maritalStatus || 'N/A'} />
+        <Row title="Age" text={user?.age ? String(user.age) : 'N/A'} />
       </View>
-      {/* {CD} */}
+
+      {/* Contact Details Section */}
       <View style={styles.row}>
         <RegularText bold>Contact Details</RegularText>
-        <Octicons
-          onPress={() => navigation.navigate('EditContactDetails')}
-          name="pencil"
-          size={20}
-          color="gray"
-        />
+        <Octicons onPress={() => navigation.navigate('EditContactDetails')} name="pencil" size={20} color="gray" />
       </View>
       <View>
-        <Row title="Email" text="johnsmith@gmail.com" />
-        <Row title="Mobile" text="+123 456 7890" />
+        <Row title="Email" text={user?.email || 'N/A'} />
+        <Row title="Mobile" text={user?.phoneNumber || user?.phone || 'N/A'} />
+        <Row title="Address" text={user?.address || user?.Country || 'N/A'} />
       </View>
-      {/* {PD} */}
+
+      {/* Personal Details Section */}
       <View style={styles.row}>
         <RegularText bold>Personal Details</RegularText>
-        <Octicons
-          onPress={() => navigation.navigate('EditPersonalDetail')}
-          name="pencil"
-          size={20}
-          color="gray"
-        />
+        <Octicons onPress={() => navigation.navigate('EditPersonalDetail')} name="pencil" size={20} color="gray" />
       </View>
       <View>
-        <Row title="Religion" text="Hindu" />
-        <Row title="Caste" text="Not Mentioned" />
-        <Row title="Height" text="5' 6/167cm" />
-        <Row title="Birth Place" text="United States" />
-        <Row title="Diet" text="Veg" />
+        <Row title="Religion" text={user?.Religion || user?.religion || 'N/A'} />
+        <Row title="Caste" text={user?.Caste || user?.caste || 'N/A'} />
+        <Row title="Height" text={user?.Height || user?.height || 'N/A'} />
+        <Row title="Birth Place" text={user?.birthPlace || 'N/A'} />
+        <Row title="Diet" text={user?.DietPreferences || user?.diet || 'N/A'} />
+        <Row title="Mother Tongue" text={user?.motherTongue || 'N/A'} />
+        <Row title="Horoscope" text={user?.horoscopes || user?.horoscope || 'N/A'} />
       </View>
-      {/* {} */}
+
+      {/* Interests and Hobbies Section */}
       <View style={styles.row}>
         <RegularText bold>Interests and Hobbies</RegularText>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-        }}>
-        {interest.map((item: any, index: any) => {
-          return (
-            <View
-              style={{
-                margin: 5,
-                borderRadius: 20,
-                paddingHorizontal: 15,
-                borderWidth: 2,
-                borderColor: 'lightgray',
-              }}>
-              <Text
-                style={{
-                  opacity: 1,
-                  fontSize: 15,
-                  color: 'rgba(0,0,0,0.3)',
-                  padding: 2,
-                  margin: 3,
-                }}>
-                {item?.type}
+      <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+        {user?.interest && user.interest.length > 0 ? (
+          user.interest.map((item: any, index: number) => (
+            <View key={index} style={{margin: 5, borderRadius: 20, paddingHorizontal: 15, borderWidth: 2, borderColor: 'lightgray'}}>
+              <Text style={{opacity: 1, fontSize: 15, color: 'rgba(0,0,0,0.7)', padding: 2, margin: 3}}>
+                {item}
               </Text>
             </View>
-          );
-        })}
+          ))
+        ) : (
+          <Text>No interests added.</Text>
+        )}
       </View>
-      {/* {END} */}
     </View>
   );
 };

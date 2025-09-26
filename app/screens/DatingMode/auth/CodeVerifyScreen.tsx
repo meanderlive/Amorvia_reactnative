@@ -5,7 +5,7 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MainLayout from '../../../components/MainLayout';
 import { BigText, RegularText, SmallText } from '../../../components/MyText';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -14,19 +14,31 @@ import { RootStackParams } from '../../../navigation/types';
 import PrimaryBtn from '../../../components/PrimaryBtn';
 import { COLORS } from '../../../styles';
 import OtpInputs from 'react-native-otp-inputs';
-import { useDispatch } from 'react-redux';
-import { setAuth } from '../../../redux/feature/auth/authSlice';
 import { api_otpVerify } from '../../../api/auth';
+import Toast from 'react-native-toast-message';
 
 const CodeVerifyScreen = () => {
   const [loading, setLoading] = React.useState(false);
-  const params = useRoute<any>().params;
-  const dispatch = useDispatch();
   const [screenOtp, setscreenOtp] = useState('');
   const { otp, token } = useRoute<any>().params;
+  console.log(otp, token )
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
+  // Show OTP in toast when component mounts
+  useEffect(() => {
+    if (otp) {
+      Toast.show({
+        type: 'info',
+        text1: 'Your OTP Code',
+        text2: `Use this code to verify: ${otp}`,
+        visibilityTime: 10000, // 10 seconds
+        autoHide: true,
+        topOffset: 50,
+        bottomOffset: 40,
+      });
+    }
+  }, [otp]);
 
   const handleVerifyOtp = async () => {
     setLoading(true);
@@ -34,8 +46,9 @@ const CodeVerifyScreen = () => {
     try {
       console.log('Verifying OTP...');
       const res = await api_otpVerify(screenOtp, token);
-      console.log('Login OTP API response:', res);
-      navigation.navigate('Welcome');
+      console.log('Verify OTP API response:', res.data);
+      //@ts-ignore
+      navigation.navigate('Welcome',{res:res});
       Alert.alert('Success', 'OTP verified successfully!');
     } catch (error: any) {
       console.log(error);
@@ -44,6 +57,7 @@ const CodeVerifyScreen = () => {
       setLoading(false);
     }
   };
+
   return (
     <MainLayout onBack={navigation.goBack} title="My Code is">
       <>
@@ -52,6 +66,7 @@ const CodeVerifyScreen = () => {
             style={{
               flexDirection: 'row',
               alignSelf: 'center',
+              marginTop:60
             }}
             autofillFromClipboard={false}
             inputStyles={{
@@ -99,9 +114,9 @@ const CodeVerifyScreen = () => {
         <View style={{ marginBottom: 20 }}>
           <PrimaryBtn
             onPress={handleVerifyOtp}
-            text={'Submit'}
             loading={loading}
-            containerStyle={{ marginHorizontal: 20, marginBottom: 30 }}
+            disabled={screenOtp.length !== 4}
+            text="Verify"
           />
         </View>
       </>

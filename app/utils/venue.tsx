@@ -1,4 +1,4 @@
-const venueList = [
+export const venueList = [
   {address: 'Empire State Building, 20 W 34th St, New York, NY 10001'},
   {address: 'Times Square, Manhattan, NY 10036'},
   {address: 'Statue of Liberty, New York, NY 10004'},
@@ -22,4 +22,4 @@ const venueList = [
   {address: 'Serendipity 3, 225 E 60th St, New York, NY 10022'},
   {address: 'Gramercy Tavern, 42 E 20th St, New York, NY 10003'},
 ];
-export {venueList};
+

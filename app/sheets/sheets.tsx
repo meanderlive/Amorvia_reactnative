@@ -16,6 +16,7 @@ import ReligionSheet from './ReligionSheet';
 import CasteSheet from './CasteSheet';
 import AgeSelectSheet from './AgeSelectSheet';
 import EducationSheet from './EducationSheet';
+import ExperienceSheet from './ExperienceSheet';
 import OccupationSheet from './OccupationSheet';
 import IncomeSheet from './IncomeSheet';
 import FatherStatusSheet from './FatherStatusSheet';
@@ -42,6 +43,7 @@ export const SHEETS = {
   CasteSheet: 'CasteSheet',
   AgeSelectSheet: 'AgeSelectSheet',
   EducationSheet: 'EducationSheet',
+  ExperienceSheet: 'ExperienceSheet',
   OccupationSheet: 'OccupationSheet',
   IncomeSheet: 'IncomeSheet',
   FatherStatusSheet: 'FatherStatusSheet',
@@ -68,6 +70,7 @@ registerSheet(SHEETS.ReligionSheet, ReligionSheet);
 registerSheet(SHEETS.CasteSheet, CasteSheet);
 registerSheet(SHEETS.AgeSelectSheet, AgeSelectSheet);
 registerSheet(SHEETS.EducationSheet, EducationSheet);
+registerSheet(SHEETS.ExperienceSheet, ExperienceSheet);
 registerSheet(SHEETS.OccupationSheet, OccupationSheet);
 registerSheet(SHEETS.IncomeSheet, IncomeSheet);
 registerSheet(SHEETS.FatherStatusSheet, FatherStatusSheet);

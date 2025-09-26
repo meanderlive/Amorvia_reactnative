@@ -1,47 +1,107 @@
 import { View } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
 import MainLayout from '../../../components/MainLayout';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParams } from '../../../navigation/types';
 import Input from '../../../components/Input';
 import PrimaryBtn from '../../../components/PrimaryBtn';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { MediumText, RegularText } from '../../../components/MyText';
+
+// Validation Schema
+const validationSchema = Yup.object().shape({
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  phone: Yup.string().matches(/^(\+?\d{1,3}?)?\s?(\(\d{3}\)|\d{3})[-.\s]?\d{3}[-.\s]?\d{4}$/, 'Invalid phone number').required('Phone number is required'),
+  password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')
+    .required('Confirm Password is required'),
+});
 
 const ContactDetailScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-      const [email, setEmail] = useState("john@example.com");
-      const [password, setpassword] = useState("");
-      const [confirmPassword, setconfirmPassword] = useState("");
-      const route = useRoute<RouteProp<RootStackParams, 'ContactDetail'>>();
-      const { payload } = route.params;
+  const route = useRoute<RouteProp<RootStackParams, 'ContactDetail'>>();
+  const { payload } = route.params;
 
+  const initialValues = {
+    email: payload.email,
+    phone: '',
+    password: '',
+    confirmPassword: '',
+  };
 
-
-
-const newPayload={
-  ...payload,
-  email:email,
-  password:password,
-  confirmPassword:confirmPassword,
-}
-
+  const handleSubmit = (values: typeof initialValues) => {
+    const newPayload = {
+      ...payload,
+      email: values.email,
+      phone: values.phone,
+      password: values.password,
+      confirmPassword: values.confirmPassword,
+    };
+    navigation.navigate('CareerDetail', { newPayload });
+  };
 
   return (
     <MainLayout onBack={navigation.goBack} title="Contact Details">
-      <View style={{ flex: 1 }}>
-        <View style={{ flex: 1, marginHorizontal: 20 }}>
-          <Input label="Email" onChangeText={setEmail} placeholder="john@example.com" />
-          <Input label="Phone" placeholder="+1 123 456 789" />
-          <Input label="Password" placeholder='enter password ' onChangeText={setpassword} secureTextEntry/>
-          <Input label="confirm Password" onChangeText={setconfirmPassword} placeholder='enter confirm password ' />
-        </View>
-        <PrimaryBtn
-          onPress={() => navigation.navigate('AlmostDone',{ newPayload })}
-          containerStyle={{ marginBottom: 40, marginHorizontal: 20 }}
-          text="Continue"
-        />
-      </View>
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+      >
+        {({ handleChange, handleBlur, handleSubmit, values, errors, touched }) => (
+          <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, marginHorizontal: 20 }}>
+              <Input
+                label="Email"
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+                value={values.email}
+                placeholder="john@example.com"
+               
+              />
+              {errors.email && touched.email && <RegularText style={{ color: 'red', marginTop: -15, marginBottom: 10 }}>{errors.email}</RegularText>}
+
+              <Input
+                label="Phone"
+                onChangeText={handleChange('phone')}
+                onBlur={handleBlur('phone')}
+                value={values.phone}
+                placeholder="+1 123 456 789"
+                keyboardType="phone-pad"
+              />
+              {errors.phone && touched.phone && <RegularText style={{ color: 'red', marginTop: -15, marginBottom: 10 }}>{errors.phone}</RegularText>}
+
+              <Input
+                label="Password"
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+                value={values.password}
+                placeholder="enter password"
+                secureTextEntry
+              />
+              {errors.password && touched.password && <RegularText style={{ color: 'red', marginTop: -15, marginBottom: 10 }}>{errors.password}</RegularText>}
+
+              <Input
+                label="Confirm Password"
+                onChangeText={handleChange('confirmPassword')}
+                onBlur={handleBlur('confirmPassword')}
+                value={values.confirmPassword}
+                placeholder="enter confirm password"
+                secureTextEntry
+              />
+              {errors.confirmPassword && touched.confirmPassword && <RegularText style={{ color: 'red', marginTop: -15, marginBottom: 10 }}>{errors.confirmPassword}</RegularText>}
+            </View>
+            <PrimaryBtn
+              onPress={handleSubmit}
+              containerStyle={{ marginBottom: 40, marginHorizontal: 20 }}
+              text="Continue"
+            />
+          </View>
+        )}
+      </Formik>
     </MainLayout>
   );
 };

@@ -11,7 +11,7 @@ import {
 import {View} from 'react-native';
 import {COLORS} from '../../../styles';
 import PrimaryBtn from '../../../components/PrimaryBtn';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute, RouteProp} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigation/types';
 import WelcomeDaterIllustration from '../../../../assets/images/svg/WelcomeDaterIllustration.svg';
@@ -19,9 +19,17 @@ import HeartSvg from '../../../../assets/logo/svg/heart.svg';
 
 const {width} = Dimensions.get('screen');
 
+type WelcomeScreenRouteProp = RouteProp<RootStackParams, 'Welcome'>;
+
 const WelcomeScreen = () => {
+  const route = useRoute<WelcomeScreenRouteProp>();
+  const {res} = route.params;
+  const userName = res.data.data.userName;
+  const token = res.data.data.token;
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
   return (
     <MainLayout>
       <View style={{marginTop: 50, alignItems: 'center', marginBottom: 10}}>
@@ -29,7 +37,7 @@ const WelcomeScreen = () => {
       </View>
       <HeartSvg style={{alignSelf: 'center', marginBottom: 10}} />
       <BigText bold style={{textAlign: 'center'}}>
-        Welcome to Marier
+        Welcome to Amorvia
       </BigText>
       <MediumText
         style={{
@@ -100,7 +108,7 @@ const WelcomeScreen = () => {
       <View style={{marginTop: 30}}>
         <PrimaryBtn
           text={'I Understand'}
-          onPress={() => navigation.navigate('BasicGuidelines')}
+          onPress={() => navigation.navigate('BasicGuidelines',{userName:userName,token:token})}
           containerStyle={{marginHorizontal: 20}}
         />
       </View>

@@ -47,7 +47,7 @@ const Stack = createNativeStackNavigator<RootStackParams>();
 
 const RootNavigator = ({isFirstTimeOpen}: any) => {
   const token = useSelector(tokenSelector);
-
+ 
   const rootState = useSelector((s: RootState) => s);
   const mode = rootState.auth.mode;
 

@@ -29,7 +29,7 @@ export const authSlice = createSlice({
       updateUser: (state, action: PayloadAction<any>) => {
         const user = action.payload;
         const newUser = {...state.user ,...user};
-        state.user = newUser;
+        state.user = newUser;   
         setLocalUser(newUser);
       },
       logOut: (state, action: PayloadAction<any>) => {
@@ -48,9 +48,12 @@ export const authSlice = createSlice({
 
 // Action creators are generated for each case reducer function
 export const {setAuth, updateUser, logOut,changeAppMode } = authSlice.actions
-export const tokenSelector = (s: any) => s.auth.accessToken;
+export const tokenSelector = (s: any) => s.auth.accessToken;  
 export const authSelector = (s: any) => s.auth.user;
 export const modeSelector = (s: any) => s.auth.mode;
 
 
 export default authSlice.reducer
+
+
+ 

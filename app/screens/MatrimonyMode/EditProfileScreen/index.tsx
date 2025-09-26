@@ -56,10 +56,8 @@ const EditProfileScreen = () => {
   const token = useSelector((s: any) => s.auth.accessToken);
   const [view, setView] = useState(1);
 
-  const {user, accessToken} = useSelector((s: any) => s.auth);
-  const [defaultVal, setDefaultVal] = React.useState(null);
-  const navigation =
-    useNavigation<NativeStackNavigationProp<ProfileStackParams>>();
+  const user = useSelector((s: any) => s.auth.user);
+  const navigation = useNavigation<NativeStackNavigationProp<ProfileStackParams>>();
 
   const openCamera = async () => {
     await launchCamera(
@@ -137,6 +135,8 @@ const EditProfileScreen = () => {
           <View style={styles.imgView}>
             {profilePhotoUri ? (
               <Image style={styles.img} source={{uri: profilePhotoUri}} />
+            ) : user?.profilePhoto ? (
+              <Image style={styles.img} source={{uri: user.profilePhoto}} />
             ) : (
               <Image
                 style={styles.img}
@@ -157,16 +157,18 @@ const EditProfileScreen = () => {
             />
           </View>
 
-          <View style={[styles.onlineStatus, {width: 85, gap: 0}]}>
+          <View style={[styles.onlineStatus, {width: 85, gap: 0}]}> 
             <Entypo name="dot-single" size={30} color="#02BC49" />
-            <Text style={{color: '#02BC49', marginRight: 5}}>Online</Text>
+            <Text style={{color: '#02BC49', marginRight: 5}}>
+              {user?.isOnline ? 'Online' : 'Offline'}
+            </Text>
           </View>
           <BigText bold style={{textAlign: 'center'}}>
-            John Deo
+            {user?.name || user?.userName || 'No Name'}
           </BigText>
 
           <RegularText style={{marginBottom: 20, textAlign: 'center'}}>
-            Software engineer
+            {user?.occupation || user?.bio || 'No occupation'}
           </RegularText>
         </View>
         {/* {HEADER END} */}

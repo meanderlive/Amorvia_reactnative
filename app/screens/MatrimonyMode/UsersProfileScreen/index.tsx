@@ -86,12 +86,12 @@ const UsersProfileScreen = () => {
               </MediumText>
               <FontAwesome5 name="crown" size={22} color="#FFBB37" />
               <View style={styles.row5}>
-                <Entypo
+                {/* <Entypo
                   style={{marginTop: -4, marginRight: -5}}
                   name="dot-single"
                   size={29}
                   color="#64DD17"
-                />
+                /> */}
 
                 <SmallText
                   style={{

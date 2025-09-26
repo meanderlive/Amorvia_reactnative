@@ -5,7 +5,7 @@ import { BASE_URL } from ".";
 // GET ALL INTERESTS-> GET
 
 export const api_getAllInterests = async (token:string) => {
-    const uri = `${BASE_URL}/interests/getAll`;
+  const uri = `${BASE_URL}/interest/getall`;
     
     const response = await fetch(uri, {
       method: "GET",

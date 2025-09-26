@@ -11,122 +11,165 @@ import { SheetManager } from 'react-native-actions-sheet';
 import { SHEETS } from '../../../sheets/sheets';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import { api_createUser } from '../../../api/auth';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
+// Validation Schema
+const validationSchema = Yup.object().shape({
+  fullName: Yup.string()
+    .min(2, 'Name is too short')
+    .required('Full name is required'),
+  gender: Yup.string()
+    .required('Gender is required'),
+  dob: Yup.date()
+    .max(new Date(), 'Date cannot be in the future')
+    .required('Date of birth is required')
+    .test('age', 'You must be at least 18 years old', function(value) {
+      const cutoff = new Date();
+      cutoff.setFullYear(cutoff.getFullYear() - 18);
+      return value <= cutoff;
+    }),
+  height: Yup.string()
+    .required('Height is required'),
+  country: Yup.string()
+    .required('Country is required')
+});
 
 const CreateAccountScreen = () => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParams>>();
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
-  const [dob, setDob] = useState<any>('');
-  const [sex, setSex] = useState('Male');
-  const [height, setHeight] = useState('180 cm');
-  const [fullName, setfullName] = useState("deafult");
-  const [Country, setCountry] = useState("");
+  const initialValues = {
+    fullName: '',
+    gender: 'Male',
+    dob: null as Date | null,
+    height: '180 cm',
+    country: '',
+  };
 
-
-
-
-
-
-  const handleSubmit = async () => {
+  const handleSubmit = async (values: typeof initialValues) => {
     const payload = {
-      fullname: fullName,
-      dob: dob,
-      gender: sex,
-      height: height,
-      Country: Country,
-    }
-
+      fullname: values.fullName,
+      dob: values.dob,
+      gender: values.gender,
+      height: values.height,
+      country: values.country,
+    };
     console.log("payload of CREATE YOUR ACCOUNT--------", JSON.stringify(payload));
     navigation.navigate('ContactDetail', { payload });
-  }
-
+  };
 
   return (
-    <ScrollView style={{ flex: 1 }}>
-      <View style={{ marginHorizontal: 20, marginTop: 40 }}>
-        <Text30 bold>Create</Text30>
-        <Text30 style={{ marginBottom: 40 }} bold>
-          your account
-        </Text30>
-        <Input label="Full Name" onChangeText={setfullName} placeholder="Jessica Smith" />
-        {/* <Input label="Password" onChangeText={setEmail} placeholder="john@example.com" /> */}
-        {/* {GENDER} */}
-        <View style={{ marginBottom: 10 }}>
-          <MediumText style={{ fontSize: 17 }}>Gender</MediumText>
-          <TouchableOpacity
-            onPress={() =>
-              SheetManager.show(SHEETS.GenderSelectSheet, {
-                payload: {
-                  onSelect: (v: string) => setSex(v),
-                },
-              })
-            }
-            style={styles.container}>
-            <RegularText style={{ color: 'gray' }}>{sex}</RegularText>
-            <AntDesign name="down" size={15} color={'gray'} />
-          </TouchableOpacity>
-        </View>
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {({ handleChange, handleBlur, handleSubmit, setFieldValue, values, errors }) => (
+        <ScrollView style={{ flex: 1 }}>
+          <View style={{ marginHorizontal: 20, marginTop: 40 }}>
+            <Text30 bold>Create</Text30>
+            <Text30 style={{ marginBottom: 40 }} bold>
+              your account
+            </Text30>
+            
+            <View style={{ marginBottom: 25 }}>
+              <MediumText style={{ fontSize: 17, marginBottom: 5 }}>Full Name</MediumText>
+              <Input 
+                onChangeText={handleChange('fullName')}
+                onBlur={handleBlur('fullName')}
+                value={values.fullName}
+                placeholder="Jessica Smith"
+              />
+              {errors.fullName && <RegularText style={{ color: 'red' }}>{errors.fullName}</RegularText>}
+            </View>
 
-        {/* {DOB} */}
-        <View style={{ marginBottom: 10 }}>
-          <MediumText style={{ fontSize: 17, marginBottom: 10 }}>
-            Date Of Birth
-          </MediumText>
-          <TouchableOpacity
-            onPress={() => setIsDatePickerOpen(true)}
-            style={styles.container}>
-            <DatePicker
-              modal
-              mode="date"
-              open={isDatePickerOpen}
-              date={dob || new Date()}
-              onConfirm={dob => {
-                setIsDatePickerOpen(false);
-                setDob(dob);
-              }}
-              onCancel={() => {
-                setIsDatePickerOpen(false);
-              }}
+            <View style={{ marginBottom: 25 }}>
+              <MediumText style={{ fontSize: 17, marginBottom: 5 }}>Gender</MediumText>
+              <TouchableOpacity
+                onPress={() =>
+                  SheetManager.show(SHEETS.GenderSelectSheet, {
+                    payload: {
+                      onSelect: (v: string) => setFieldValue('gender', v),
+                    },
+                  })
+                }
+                style={styles.container}>
+                <RegularText style={{ color: 'gray' }}>{values.gender}</RegularText>
+                <AntDesign name="down" size={15} color={'gray'} />
+              </TouchableOpacity>
+              {errors.gender && <RegularText style={{ color: 'red' }}>{errors.gender}</RegularText>}
+            </View>
+
+            <View style={{ marginBottom: 25 }}>
+              <MediumText style={{ fontSize: 17, marginBottom: 5 }}>
+                Date Of Birth
+              </MediumText>
+              <TouchableOpacity
+                onPress={() => {
+                  setIsDatePickerOpen(true);
+                }}
+                style={styles.container}>
+                <DatePicker
+                  modal
+                  mode="date"
+                  open={isDatePickerOpen}
+                  date={values.dob || new Date()}
+                  onConfirm={(date) => {
+                    setIsDatePickerOpen(false);
+                    setFieldValue('dob', date);
+                  }}
+                  onCancel={() => {
+                    setIsDatePickerOpen(false);
+                  }}
+                />
+                <RegularText style={{ color: values.dob ? 'black' : 'gray' }}>
+                  {values.dob ? values.dob.toISOString().slice(0, 10) : 'DD - MM - YYYY'}
+                </RegularText>
+                <MaterialIcons name="date-range" size={24} color="gray" />
+              </TouchableOpacity>
+              {errors.dob && <RegularText style={{ color: 'red' }}>{errors.dob}</RegularText>}
+            </View>
+
+            <View style={{ marginBottom: 25 }}>
+              <MediumText style={{ fontSize: 17, marginBottom: 5 }}>
+                Height
+              </MediumText>
+              <TouchableOpacity
+                onPress={() =>
+                  SheetManager.show(SHEETS.HeightSelectSheet, {
+                    payload: {
+                      onSelect: (h: string) => setFieldValue('height', h),
+                    },
+                  })
+                }
+                style={styles.container}>
+                <RegularText style={{ color: 'gray' }}>{values.height}</RegularText>
+                <AntDesign name="down" size={15} color={'gray'} />
+              </TouchableOpacity>
+              {errors.height && <RegularText style={{ color: 'red' }}>{errors.height}</RegularText>}
+            </View>
+
+            <View style={{ marginBottom: 25 }}>
+              <MediumText style={{ fontSize: 17, marginBottom: 5 }}>Country</MediumText>
+              <Input
+                onChangeText={handleChange('country')}
+                onBlur={handleBlur('country')}
+                value={values.country}
+                placeholder="California, USA"
+              />
+              {errors.country && <RegularText style={{ color: 'red' }}>{errors.country}</RegularText>}
+            </View>
+
+            <PrimaryBtn
+              onPress={handleSubmit}
+              containerStyle={{ marginVertical: 40 }}
+              text="Next"
             />
-            <RegularText
-              style={{
-                color: dob ? 'black' : 'gray',
-              }}>
-              {dob ? dob?.toISOString().slice(0, 10) : 'DD - MM - YYYY'}
-            </RegularText>
-            <MaterialIcons name="date-range" size={24} color="gray" />
-          </TouchableOpacity>
-        </View>
-
-
-        {/* {HEIGHT} */}
-        <View style={{ marginBottom: 10 }}>
-          <MediumText style={{ fontSize: 17 }}>Height</MediumText>
-          <TouchableOpacity
-            onPress={() =>
-              SheetManager.show(SHEETS.HeightSelectSheet, {
-                payload: {
-                  onSelect: (h: string) => setHeight(h),
-                },
-              })
-            }
-            style={styles.container}>
-            <RegularText style={{ color: 'gray' }}>{height}</RegularText>
-            <AntDesign name="down" size={15} color={'gray'} />
-          </TouchableOpacity>
-        </View>
-        {/* {} */}
-        <Input label="Country" onChangeText={setCountry} placeholder="California, USA" />
-      </View>
-      <PrimaryBtn
-        onPress={handleSubmit}
-        containerStyle={{ marginVertical: 40, marginHorizontal: 20 }}
-        text="Next"
-      />
-    </ScrollView>
+          </View>
+        </ScrollView>
+      )}
+    </Formik>
   );
 };
 
@@ -136,10 +179,10 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: 35,
+    height: 40,
     borderBottomWidth: 1,
     borderBottomColor: 'lightgray',
     justifyContent: 'space-between',
-    marginBottom: 10,
+    paddingRight: 10,
   },
 });

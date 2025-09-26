@@ -1,8 +1,8 @@
-import {View, Text, ScrollView, SafeAreaView} from 'react-native';
+import { View, Text, ScrollView, SafeAreaView } from 'react-native';
 import React from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {HomeStackParams} from '../../../navigation/types';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { HomeStackParams } from '../../../navigation/types';
 import Header from './Header';
 import Input from './Input';
 import RecommendedMatches from './RecommendedMatches';
@@ -14,9 +14,12 @@ const HomeScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<HomeStackParams>>();
   return (
-    <ScrollView style={{flex: 1}}>
+    <ScrollView style={{ flex: 1 }}>
       <SafeAreaView />
-      <Header />
+      <View style={{ marginTop: 20 }}>
+        <Header />
+      </View>
+
       <Input />
       <RecommendedMatches />
       <NewMatches />

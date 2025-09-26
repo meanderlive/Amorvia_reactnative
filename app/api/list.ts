@@ -17,6 +17,6 @@ export const api_getRandomList = async (userId:any, token:string) => {
       throw new Error(response.error);
     }
     return response;
-  };
+};
   
   

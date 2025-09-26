@@ -30,15 +30,26 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {BigText, RegularText} from '../../../components/MyText';
 import Line from '../../../components/Line';
 
+
 const Details = () => {
+  const user = useSelector((s: any) => s.auth.user);
+  // Normalize user data
+  const normalized = {
+    name: user?.name || user?.userName || user?.fullName || 'No Name',
+    isOnline: user?.isOnline ?? true,
+    subscription: user?.subscription ?? false,
+    profilePhoto: user?.profilePhoto || '',
+  };
   return (
     <View>
-      <View style={[styles.onlineStatus, {width: 85, gap: 0}]}>
-        <Entypo name="dot-single" size={30} color="#02BC49" />
-        <Text style={{color: '#02BC49', marginRight: 5}}>Online</Text>
+      <View style={[styles.onlineStatus, {width: 85, gap: 0}]}> 
+        <Entypo name="dot-single" size={30} color={normalized.isOnline ? "#02BC49" : "gray"} />
+        <Text style={{color: normalized.isOnline ? '#02BC49' : 'gray', marginRight: 5}}>
+          {normalized.isOnline ? 'Online' : 'Offline'}
+        </Text>
       </View>
       <BigText bold style={{textAlign: 'center'}}>
-        John Deo
+        {normalized.name}
       </BigText>
       <View
         style={{
@@ -48,8 +59,9 @@ const Details = () => {
           justifyContent: 'center',
           marginBottom: 20,
         }}>
-        <RegularText style={{color: 'gray'}}>Software engineer</RegularText>
-
+        <RegularText style={{color: 'gray'}}>
+          {normalized.occupation}
+        </RegularText>
         <Octicons
           style={{marginLeft: 15}}
           name="share"
@@ -64,7 +76,7 @@ const Details = () => {
       </View>
       <View style={styles.onlineStatus}>
         <Foundation name="crown" size={24} color="#F9A000" />
-        <Text style={{color: '#F9A000'}}>Upgrade</Text>
+        <Text style={{color: '#F9A000'}}>{normalized.subscription ? 'Premium' : 'Upgrade'}</Text>
       </View>
     </View>
   );

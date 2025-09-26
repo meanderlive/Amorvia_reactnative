@@ -21,26 +21,21 @@ const Row = ({text, title}: RowProps) => {
     </React.Fragment>
   );
 };
-const EduCareer = () => {
-  const navigation =
-    useNavigation<NativeStackNavigationProp<MatProfileStackParams>>();
+const EduCareer = ({ user }: { user: any }) => {
+  const navigation = useNavigation<NativeStackNavigationProp<MatProfileStackParams>>();
   return (
     <View style={{paddingHorizontal: 20}}>
       <View style={styles.row}>
         <RegularText bold>Edu & Career</RegularText>
-        <Octicons
-          onPress={() => navigation.navigate('EditEduCareer')}
-          name="pencil"
-          size={20}
-          color="gray"
-        />
+        <Octicons onPress={() => navigation.navigate('EditEduCareer')} name="pencil" size={20} color="gray" />
       </View>
       <View>
-        <Row title="Profession" text="Work in Digital Service" />
-        <Row title="Company Name" text="ABC Pvt. Ltd." />
-        <Row title="Annual Income" text="$200000 " />
-        <Row title="Highest Qualification" text="Masters" />
-        <Row title="College Name" text="Oxford University" />
+        <Row title="Profession" text={user?.occupation || user?.profession || 'N/A'} />
+        <Row title="Company Name" text={user?.CompanyName || user?.company || 'N/A'} />
+        <Row title="Annual Income" text={user?.salary || user?.income || 'N/A'} />
+        <Row title="Highest Qualification" text={user?.HighestQualification || user?.qualification || 'N/A'} />
+        <Row title="College Name" text={user?.CollageName || user?.college || 'N/A'} />
+        <Row title="Working Experience" text={user?.workingExperience || user?.experience || 'N/A'} />
       </View>
     </View>
   );

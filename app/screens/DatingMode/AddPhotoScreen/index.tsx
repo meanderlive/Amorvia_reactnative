@@ -14,10 +14,6 @@ import {COLORS} from '../../../styles';
 const ImagePlaceholder = ({onImageSelect, image}: any) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-
-
- 
-
   return image ? (
     <Image
       source={image}
@@ -85,7 +81,7 @@ const AddPhotoScreen = () => {
           marginHorizontal: 20,
         }}>
         <RegularText
-          style={{
+          style={{ 
             color: COLORS.grey,
           }}>{`It’s all About Presentation `}</RegularText>
         <RegularText

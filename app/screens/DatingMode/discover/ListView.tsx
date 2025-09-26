@@ -128,6 +128,7 @@ const ListView = () => {
           return <Item name={item.name} img={item.img} />;
         }}
       />
+    
     </View>
   );
 };

@@ -13,6 +13,7 @@ type InputProps = {
   secureTextEntry?: boolean;
   onBlur?: any;
 };
+
 const Input = ({
   placeholder,
   label,
@@ -38,10 +39,8 @@ const Input = ({
           {
             borderBottomColor: 'lightgray',
             borderBottomWidth: 1,
-            paddingVertical: 10,
-            marginBottom: 10,
+            paddingVertical: 12.5,
             color: 'gray',
-            paddingLeft: -10,
             fontSize: 14,
           },
           inputStyle,

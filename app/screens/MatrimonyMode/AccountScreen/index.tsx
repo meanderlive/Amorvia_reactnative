@@ -43,6 +43,7 @@ type RowProps = {
 };
 
 const Row = ({text, icon, onPress}: RowProps) => {
+  
   return (
     <React.Fragment>
       <TouchableOpacity
@@ -175,6 +176,8 @@ const AccountScreen = () => {
         <View style={styles.imgView}>
           {profilePhotoUri ? (
             <Image style={styles.img} source={{uri: profilePhotoUri}} />
+          ) : user?.profilePhoto ? (
+            <Image style={styles.img} source={{uri: user.profilePhoto}} />
           ) : (
             <Image style={styles.img} source={{uri: IMAGE_URI}} />
           )}

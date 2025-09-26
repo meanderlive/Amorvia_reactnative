@@ -1,30 +1,37 @@
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Alert } from 'react-native';
 import React from 'react';
 import MainLayout from '../../../components/MainLayout';
 import { BigText, MediumText } from '../../../components/MyText';
 import PrimaryBtn from '../../../components/PrimaryBtn';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParams } from '../../../navigation/types';
 import { useDispatch } from 'react-redux';
+import { setAuth } from '../../../redux/feature/auth/authSlice';
+
+type BasicGuidelinesScreenRouteProp = RouteProp<
+  RootStackParams,
+  'BasicGuidelines'
+>;
 
 const BasicGuidelinesScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
   const dispatch = useDispatch();
+  const route = useRoute<BasicGuidelinesScreenRouteProp>();
+  const { userName, token } = route.params;
 
   const handleSubmit = async () => {
-    // if (!true) {
-    // dispatch(
-    //   setAuth({
-    //     name: 'GHOST',
-    //     token: 'GHOST_TOKEN',
-    //   }),
-    // );
-    // } else {
-    //   //@ts-ignore
-    navigation.navigate('MainTab',);
-    // }
+    if (true) {
+    dispatch(
+      setAuth({
+        name: userName,
+        token: token,
+      }),
+    );
+    } else {
+   Alert.alert("We CANT LOGIN BECAUSE THERE IS AN ISSUE ")
+    }
   };
   return (
     <MainLayout>

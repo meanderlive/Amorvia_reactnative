@@ -9,7 +9,8 @@ import {LOCAL_KEYS, getLocalUser} from './app/utils/helper';
 import {setAuth} from './app/redux/feature/auth/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SplashScreen from './app/screens/SplashScreen';
-import {View} from 'react-native';
+import Toast from 'react-native-toast-message';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const AppInit = () => {
   const [ready, setReady] = React.useState(false);
@@ -22,7 +23,7 @@ const AppInit = () => {
         LOCAL_KEYS.IS_FIRST_TIME_OPEN,
       );
       console.log({
-        localAuthData,
+        localAuthData, 
         isFirstTimeOpenData: !Boolean(isFirstTimeOpenData),
       });
       if (localAuthData) {
@@ -41,21 +42,25 @@ const AppInit = () => {
   React.useEffect(() => {
     init();
   }, []);
+  
   return (
-    <>{ready ? <RootNavigator isFirstTimeOpen={true} /> : <SplashScreen />}</>
+    <>
+      {ready ? <RootNavigator isFirstTimeOpen={true} /> : <SplashScreen />}
+      <Toast />
+    </>
   );
 };
 
 const App = () => {
   return (
     <Provider store={store}>
-      <View style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1}}>
         <NavigationContainer>
           <SheetProvider>
             <AppInit />
           </SheetProvider>
         </NavigationContainer>
-      </View>
+      </SafeAreaView>
     </Provider>
   );
 };
