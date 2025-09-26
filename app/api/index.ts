@@ -1,9 +1,15 @@
 
-
+//Base url
 
 export const BASE_URL: string = 'https://datingapi.meander.software/';
 
 
-
-const dating =  "659436bcacc570d6b14edf41";
-const materimony  = "65943637acc570d6b14edf38";
+//Get Image url
+export const getImageUrl = (path: string): string => {
+    if (!path || typeof path !== 'string') {
+        console.warn('getImageUrl: Invalid path provided:', path);
+        return '';
+    }
+    return `${BASE_URL}/assets/images/${path}`;
+};
+ 

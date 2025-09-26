@@ -62,4 +62,4 @@ export const api_AddInterest = async ( userId:string,token:string ,interests:any
     }
     console.log(response)
     return response;
-  };
+}; 

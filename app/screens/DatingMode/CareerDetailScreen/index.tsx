@@ -11,6 +11,11 @@ import {SHEETS} from '../../../sheets/sheets';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
+<<<<<<< Updated upstream
+=======
+import { useDispatch } from 'react-redux';
+import { setAuth } from '../../../redux/feature/auth/authSlice';
+>>>>>>> Stashed changes
 
 // Validation Schema
 const validationSchema = Yup.object().shape({
@@ -21,6 +26,10 @@ const validationSchema = Yup.object().shape({
 const CareerDetailScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+<<<<<<< Updated upstream
+=======
+    const dispatch = useDispatch()
+>>>>>>> Stashed changes
     const route = useRoute<RouteProp<RootStackParams, 'CareerDetail'>>();
     const { newPayload } = route.params;
 
@@ -35,6 +44,11 @@ const CareerDetailScreen = () => {
         education: values.education,
         profession: values.profession,
       };
+<<<<<<< Updated upstream
+=======
+      dispatch(setAuth({ user: moreNewPayload, token: '' }));
+      console.log("new updated data", moreNewPayload);
+>>>>>>> Stashed changes
       navigation.navigate('AddPhoto', { moreNewPayload });
     };
 

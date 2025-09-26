@@ -5,6 +5,8 @@ export type RootStackParams = {
   CareerDetailMat: undefined;
   AlmostDoneMat: undefined;
   FamilyDetail: undefined;
+  MainTab: undefined;
+  MainTabMat: undefined;
 
   // Matrimony Screens
 
@@ -19,7 +21,11 @@ export type RootStackParams = {
   SubmitId: undefined;
   PartnerPref: undefined;
   InterestMat: undefined;
+<<<<<<< Updated upstream
   AddPhotoMat: { interests: string[] };
+=======
+  AddPhotoMat: undefined;
+>>>>>>> Stashed changes
   // AddPhoto: {user: User; accessToken: string};
 
   // Dating Screens
@@ -91,7 +97,11 @@ export type RootStackParams = {
   // Interest: {user: User; accessToken: string};
   Interest: {
     moreNewPayload: {
+<<<<<<< Updated upstream
       fullname: string;
+=======
+      name: string;
+>>>>>>> Stashed changes
       dob: string | Date;
       gender: string;
       height: string;
@@ -102,14 +112,24 @@ export type RootStackParams = {
     };
   };
   AddPhoto: undefined;
-  MainTab: undefined;
-  MainTabMat: undefined;
   WelcomeStack: undefined;
+<<<<<<< Updated upstream
   BasicGuidelines: {userName: string; token: string};
   CreateAccount: undefined;
   ContactDetail: {
     payload: {
       fullname: string;
+=======
+  BasicGuidelines: {
+    userName: string;
+    token: string;
+    userData: any; // Consider defining a proper interface for userData
+  };
+  CreateAccount: undefined;
+  ContactDetail: {
+    payload: {
+      name: string;
+>>>>>>> Stashed changes
       dob: string | Date;
       gender: string;
       height: string;
@@ -119,7 +139,11 @@ export type RootStackParams = {
   VerifyOtpTwo: undefined;
   CareerDetail: {
     newPayload: {
+<<<<<<< Updated upstream
       fullname: string;
+=======
+      name: string;
+>>>>>>> Stashed changes
       dob: string | Date;
       gender: string;
       height: string;
@@ -131,7 +155,11 @@ export type RootStackParams = {
   };
   AlmostDone: {
     newPayload: {
+<<<<<<< Updated upstream
       fullname: string;
+=======
+      name: string;
+>>>>>>> Stashed changes
       dob: string | Date;
       gender: string;
       height: string;

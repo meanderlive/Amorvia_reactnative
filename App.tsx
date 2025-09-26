@@ -1,12 +1,12 @@
 import React from 'react';
 import RootNavigator from './app/navigation/RootNavigator';
-import {NavigationContainer} from '@react-navigation/native';
-import {store} from './app/redux';
-import {Provider, useDispatch} from 'react-redux';
-import {SheetProvider} from 'react-native-actions-sheet';
+import { NavigationContainer } from '@react-navigation/native';
+import { store } from './app/redux';
+import { Provider, useDispatch } from 'react-redux';
+import { SheetProvider } from 'react-native-actions-sheet';
 import './app/sheets/sheets';
-import {LOCAL_KEYS, getLocalUser} from './app/utils/helper';
-import {setAuth} from './app/redux/feature/auth/authSlice';
+import { LOCAL_KEYS, getLocalUser } from './app/utils/helper';
+import { setAuth } from './app/redux/feature/auth/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SplashScreen from './app/screens/SplashScreen';
 import Toast from 'react-native-toast-message';
@@ -30,31 +30,28 @@ const AppInit = () => {
         dispatch(setAuth(localAuthData));
       }
       setIsFirstTimeOpen(!Boolean(isFirstTimeOpenData));
+      setReady(true);
     } catch (err) {
       console.log(err);
     } finally {
       setTimeout(() => {
         setReady(true);
-      }, 500);
+      }, 1000);
     }
   };
 
   React.useEffect(() => {
     init();
   }, []);
-  
   return (
-    <>
-      {ready ? <RootNavigator isFirstTimeOpen={true} /> : <SplashScreen />}
-      <Toast />
-    </>
+    <>{ready ? <RootNavigator isFirstTimeOpen={true} /> : <SplashScreen />}</>
   );
 };
 
 const App = () => {
   return (
     <Provider store={store}>
-      <SafeAreaView style={{flex: 1}}>
+      <View style={{flex: 1}}>
         <NavigationContainer>
           <SheetProvider>
             <AppInit />

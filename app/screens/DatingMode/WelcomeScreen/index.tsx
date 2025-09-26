@@ -16,6 +16,8 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {RootStackParams} from '../../../navigation/types';
 import WelcomeDaterIllustration from '../../../../assets/images/svg/WelcomeDaterIllustration.svg';
 import HeartSvg from '../../../../assets/logo/svg/heart.svg';
+import { useDispatch } from 'react-redux';
+import { setAuth } from '../../../redux/feature/auth/authSlice';
 
 const {width} = Dimensions.get('screen');
 
@@ -23,13 +25,41 @@ type WelcomeScreenRouteProp = RouteProp<RootStackParams, 'Welcome'>;
 
 const WelcomeScreen = () => {
   const route = useRoute<WelcomeScreenRouteProp>();
+<<<<<<< Updated upstream
   const {res} = route.params;
   const userName = res.data.data.userName;
   const token = res.data.data.token;
+=======
+  const dispatch = useDispatch();
+  const { finalPayload } = route.params;   // ✅ match what you send
+  const user = finalPayload;
+
+  React.useEffect(() => {
+    if (user) {
+      dispatch(setAuth(user));
+    }
+  }, [user, dispatch]);
+>>>>>>> Stashed changes
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
+<<<<<<< Updated upstream
+=======
+    const handleProceed = () => {
+      if (user) {
+        navigation.navigate("BasicGuidelines", {
+          userName: user?.name || "User",
+          token: user?.token || "",
+          userData: user,
+        });
+        console.log("not navigating",navigation)
+      } else {
+        console.warn("User data not available, cannot proceed.");
+      }
+    };
+
+>>>>>>> Stashed changes
   return (
     <MainLayout>
       <View style={{marginTop: 50, alignItems: 'center', marginBottom: 10}}>
@@ -68,7 +98,7 @@ const WelcomeScreen = () => {
         }}>
         <View style={styles.input}>
           <SmallText style={{width: 130, fontSize: 12, color: COLORS.grey}}>
-            Upload only yopur own photos, age and bio that's yours.
+            Upload only your own photos, age and bio that's yours.
           </SmallText>
         </View>
         <View style={styles.input}>
@@ -108,7 +138,11 @@ const WelcomeScreen = () => {
       <View style={{marginTop: 30}}>
         <PrimaryBtn
           text={'I Understand'}
+<<<<<<< Updated upstream
           onPress={() => navigation.navigate('BasicGuidelines',{userName:userName,token:token})}
+=======
+          onPress={handleProceed}
+>>>>>>> Stashed changes
           containerStyle={{marginHorizontal: 20}}
         />
       </View>

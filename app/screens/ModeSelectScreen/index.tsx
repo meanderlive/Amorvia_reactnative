@@ -27,47 +27,48 @@ import { api_getModeByID } from '../../api/mode';
 const ModeSelectScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
-  const [phoneNumber, setPhoneNumber] = React.useState('');
-  const mode = useSelector((s: RootState) => s.auth.mode);
   const dispatch = useDispatch<AppDispatch>();
 
   const [loading, setLoading] = React.useState(false);
 
-  const DatingId = '659436bcacc570d6b14edf41';
-  const MaterimonyId = '65943637acc570d6b14edf38';
-
-  const handleSubmit = async (selectedMode: string) => {
+  const handleSubmit = async (selectedMode: keyof typeof AppMode) => {
     console.log('handleSubmit called with mode:', selectedMode);
     setLoading(true);
+    
     try {
-      const Id = selectedMode === AppMode.Dating ? DatingId : MaterimonyId;
-      console.log('Using ID:', Id);
-
-      // Fetch mode data
-      console.log('Calling API with ID:', Id);
-      const res = await api_getModeByID(Id);
-      console.log('Full API response:', JSON.stringify(res, null, 2));
-      console.log('res.data type:', typeof res.data);
-      console.log('res.data is array:', Array.isArray(res.data));
-      console.log('res.data length:', res.data?.length);
-      console.log('Mode data to store:', res.data);
-
-      // Update mode in Redux with the full mode data
-      // Check if res.data is an array and take the first element
-      const modeData = Array.isArray(res.data) ? res.data[0] : res.data;
-      console.log('Extracted modeData:', JSON.stringify(modeData, null, 2));
-      dispatch(changeAppMode(modeData));
-      console.log('changeAppMode dispatched with data:', modeData);
-
+      console.log('handleSubmit called with mode:', selectedMode);
+      const modeInfo = AppMode[selectedMode];
+      
+      // Create mode data
+      const modeData = {
+        _id: modeInfo.id,
+        name: modeInfo.name,
+        description: `${modeInfo.name} Mode`
+      };
+      
+      console.log('Mode data to store:', modeData);
+      
+      // Update mode in Redux
+      await dispatch(changeAppMode(modeData));
+      
+      console.log('Mode updated in Redux, navigating...');
+      
       // Navigate based on selected mode
-      if (selectedMode === AppMode.Dating) {
-        navigation.navigate('Login'); // Navigate to Login for Dating
-      } else if (selectedMode === AppMode.Matrimony) {
-        navigation.navigate('First'); // Navigate to First for Matrimony
+      if (selectedMode === 'Dating') {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Login' }],
+        });
+      } else if (selectedMode === 'Matrimony') {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'First' }],
+        });
       }
+      
     } catch (error) {
       console.log('Error in handleSubmit:', error);
-      Alert.alert('Error', 'Something went wrong');
+      Alert.alert('Error', 'Failed to process mode selection');
     } finally {
       setLoading(false);
     }
@@ -111,23 +112,19 @@ const ModeSelectScreen = () => {
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <TouchableOpacity
-            onPress={() => handleSubmit(AppMode.Dating)}
+            onPress={() => handleSubmit('Dating')}
             style={styles.btn}
             disabled={loading}
           >
-            <RegularText style={{ color: 'white' }}>
-              {loading ? 'Loading...' : 'Dating'}
-            </RegularText>
+            <RegularText style={{ color: 'white' }}>Dating</RegularText>
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={() => handleSubmit(AppMode.Matrimony)}
+            onPress={() => handleSubmit('Matrimony')}
             style={styles.btn}
             disabled={loading}
           >
-            <RegularText style={{ color: 'white' }}>
-              {loading ? 'Loading...' : 'Matrimony'}
-            </RegularText>
+            <RegularText style={{ color: 'white' }}>Matrimony</RegularText>
           </TouchableOpacity>
         </View>
         

@@ -41,21 +41,37 @@ export const api_createUser = async (payload: any) => {
 // VERIFY OTP -> POST
 
 
-export const api_otpVerify = async (otp: any, token: any) => {
-  // const uri = `${BASE_URL}/User/verifyOtpEmail`;
+export const api_otpVerify = async (otp: string, token: string): Promise<{
+  isSuccess: boolean;
+  data: any;
+  message: string;
+  statusCode: number;
+}> => {
   const uri = "https://datingapi.meander.software/User/verifyOtpEmail";
+  
+  try {
+    const response = await fetch(uri, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ otp, token }),
+    });
 
-console.log(otp,token,"in api folder response ----<<<<<<<<<<<")
-  const response = await fetch(uri, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      // 'x-access-token': token,
-    },
-    body: JSON.stringify({otp,token}),
-  }).then(res => res.json());
-  if (!response.isSuccess) {
-    throw new Error(response.error);
+    const data = await response.json();
+    
+    if (!response.ok || !data.isSuccess) {
+      throw new Error(data.message || 'Failed to verify OTP');
+    }
+    
+    return {
+      isSuccess: true,
+      data: data.data,
+      message: data.message || 'OTP verified successfully',
+      statusCode: response.status
+    };
+  } catch (error: any) {
+    console.error('OTP verification error:', error);
+    throw new Error(error.message || 'Network error occurred while verifying OTP');
   }
-  return response;
 };

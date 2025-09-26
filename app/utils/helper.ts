@@ -28,16 +28,21 @@ const getLocalUser = async () => {
 };
 const destroyLocalStorage = async () => {
   try {
-    await AsyncStorage.removeItem(LOCAL_KEYS.AUTH);
-    // await AsyncStorage.setItem(
-    //   LOCAL_KEYS.IS_NEWLY_INSTALLED,
-    //   JSON.stringify(false),
-    // );
+    // Get all keys
+    const keys = await AsyncStorage.getAllKeys();
+    // Filter out any keys you want to keep
+    const keysToRemove = keys.filter(key => 
+      key !== LOCAL_KEYS.IS_FIRST_TIME_OPEN // Keep first time open flag if needed
+    );
+    
+    // Remove all keys except the ones we want to keep
+    if (keysToRemove.length > 0) {
+      await AsyncStorage.multiRemove(keysToRemove);
+    }
   } catch (e: any) {
     throw new Error(e?.message);
   }
 };
-``;
 
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
@@ -60,4 +65,13 @@ export const onShare = async () => {
   } catch (error: any) {
     console.log('onShare', error);
   }
+};
+
+export const resetReduxStore = (dispatch: any) => {
+  // Instead of importing authSlice, we'll just clear the AsyncStorage
+  // and let the app handle the state reset through navigation
+  destroyLocalStorage();
+  
+  // You'll need to handle the navigation to the login screen in your LogoutPopup component
+  // or wherever the logout is initiated from
 };

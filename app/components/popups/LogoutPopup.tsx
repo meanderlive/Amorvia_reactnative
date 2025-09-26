@@ -5,6 +5,8 @@ import {COLORS} from '../../styles';
 import {RegularText, SmallText} from '../MyText';
 import {useDispatch} from 'react-redux';
 import {logOut} from '../../redux/feature/auth/authSlice';
+import {resetReduxStore} from '../../utils/helper';
+import { useNavigation } from '@react-navigation/native';
 
 const LogoutPopup = ({
   onCancel,
@@ -16,12 +18,24 @@ const LogoutPopup = ({
   visible: boolean;
 }) => {
   const dispatch = useDispatch();
-  const handleLogout = () => {
-    onCancel();
-    setTimeout(() => {
-      dispatch(logOut(null));
-    }, 100);
+  const navigation = useNavigation();
+  
+  const handleLogout = async () => {
+    try {
+      onCancel();
+      // Reset Redux store
+      resetReduxStore(dispatch);
+      navigation.navigate('ModeSelect')
+      
+      // Call any additional onConfirm callback if provided
+      if (onConfirm) {
+        onConfirm();
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
+
   return (
     <Modal animationType="fade" transparent={true} visible={visible}>
       <View
@@ -47,34 +61,31 @@ const LogoutPopup = ({
               Are you sure you want to logout ?
             </RegularText>
           </View>
-
-          <View style={{flexDirection: 'row'}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              borderTopWidth: 1,
+              borderTopColor: COLORS.lightGrey,
+            }}>
             <TouchableOpacity
               onPress={onCancel}
               style={{
-                padding: 20,
                 flex: 1,
-                borderBottomLeftRadius: 20,
-                borderColor: 'rgba(0,0,0,0.2)',
-                borderTopWidth: 0.6,
-                borderRightWidth: 0.3,
+                padding: 15,
+                alignItems: 'center',
+                borderRightWidth: 1,
+                borderRightColor: COLORS.lightGrey,
               }}>
-              <RegularText style={{textAlign: 'center'}}> Cancel</RegularText>
+              <RegularText style={{color: COLORS.grey}}>Cancel</RegularText>
             </TouchableOpacity>
-
             <TouchableOpacity
               onPress={handleLogout}
               style={{
-                padding: 20,
                 flex: 1,
-                borderBottomRightRadius: 20,
-                borderColor: 'rgba(0,0,0,0.2)',
-                borderTopWidth: 0.6,
-                borderLeftWidth: 0.3,
+                padding: 15,
+                alignItems: 'center',
               }}>
-              <RegularText style={{color: COLORS.primary, textAlign: 'center'}}>
-                Logout
-              </RegularText>
+              <RegularText style={{color: COLORS.primary}}>Logout</RegularText>
             </TouchableOpacity>
           </View>
         </View>

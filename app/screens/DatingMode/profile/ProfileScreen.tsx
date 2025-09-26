@@ -1,170 +1,144 @@
+import React from 'react';
 import {
   StyleSheet,
   Text,
   View,
   Alert,
   Image,
-  Dimensions,
   TouchableOpacity,
+  Dimensions,
+  ScrollView,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { SheetManager } from 'react-native-actions-sheet';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import { useDispatch, useSelector } from 'react-redux';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Octicons from 'react-native-vector-icons/Octicons';
 import Foundation from 'react-native-vector-icons/Foundation';
 import Feather from 'react-native-vector-icons/Feather';
-import {useNavigation} from '@react-navigation/native';
-import {COLORS} from '../../../styles';
-import {NativeStackNavigationProp} from '@react-navigation/native-stack';
-import {ProfileStackParams} from '../../../navigation/types';
-import {SheetManager} from 'react-native-actions-sheet';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {SHEETS} from '../../../sheets/sheets';
-import {api_updateProfile} from '../../../api/user';
-import {useDispatch, useSelector} from 'react-redux';
-import {updateUser} from '../../../redux/feature/auth/authSlice';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {LOCAL_KEYS, onShare} from '../../../utils/helper';
-import MainLayout from '../../../components/MainLayout';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {BigText, RegularText} from '../../../components/MyText';
+
+import MainLayout from '../../../components/MainLayout';
+import { BigText, RegularText } from '../../../components/MyText';
+import { COLORS } from '../../../styles';
 import About from './About';
+import { SHEETS } from '../../../sheets/sheets';
+import { api_updateProfile } from '../../../api/user';
+import { updateUser, authSelector } from '../../../redux/feature/auth/authSlice';
+import { ProfileStackParams } from '../../../navigation/types';
+import { onShare } from '../../../utils/helper';
 
-const {width} = Dimensions.get('screen');
-const checkRememberMe = async () => {
-  try {
-    const res = await AsyncStorage.getItem(LOCAL_KEYS.REMEMBER_ME);
-    if (res) {
-      return JSON.parse(res);
-    } else {
-      return null;
-    }
-  } catch (error: any) {
-    console.log(error);
-  }
-};
+const { width } = Dimensions.get('screen');
 
-const IMAGE_URI =
+const PLACEHOLDER_IMAGE =
   'https://cdn.ttgtmedia.com/rms/onlineimages/anime_girl-h_half_column_mobile.png';
 
 const ProfileScreen = () => {
-  const [profilePhotoUri, setProfilePhotoUri] = React.useState(null);
+  const navigation = useNavigation<NativeStackNavigationProp<ProfileStackParams>>();
   const dispatch = useDispatch();
-  const token = useSelector((s: any) => s.auth.accessToken);
-  const {user, accessToken} = useSelector((s: any) => s.auth);
-  const [defaultVal, setDefaultVal] = React.useState(null);
-  const navigation =
-    useNavigation<NativeStackNavigationProp<ProfileStackParams>>();
+  const user = useSelector(authSelector);
+  console.log('User data in ProfileScreen:', user); // For debugging
+
+  // Initialize profile photo safely
+  const [profilePhotoUri, setProfilePhotoUri] = React.useState<string>(PLACEHOLDER_IMAGE);
+
+  // Update profile photo when user changes
+  React.useEffect(() => {
+    if (user?.profilePhoto) {
+      setProfilePhotoUri(user.profilePhoto);
+    } else if (user?.user?.profilePhoto) { // Check nested user object
+      setProfilePhotoUri(user.user.profilePhoto);
+    } else {
+      setProfilePhotoUri(PLACEHOLDER_IMAGE);
+    }
+  }, [user]);
 
   const openCamera = async () => {
-    await launchCamera(
-      {
-        mediaType: 'photo',
-      },
-      (res: any) => {
-        console.log(res);
+    launchCamera({ mediaType: 'photo' }, (res: any) => {
+      if (res.assets && res.assets.length > 0) {
         setProfilePhotoUri(res.assets[0].uri);
-      },
-    );
+      }
+    });
     SheetManager.hide(SHEETS.CameraAndGalleryOption);
   };
 
   const openGallery = async () => {
-    await launchImageLibrary(
-      {
-        mediaType: 'photo',
-      },
-      (res: any) => {
-        console.log({res}, 'sdfsdfds');
+    launchImageLibrary({ mediaType: 'photo' }, (res: any) => {
+      if (res.assets && res.assets.length > 0) {
         setProfilePhotoUri(res.assets[0].uri);
-      },
-    );
+      }
+    });
     closeSheet();
   };
 
   const closeSheet = async () => {
-    if (profilePhotoUri !== null) {
+    if (profilePhotoUri) {
       handleUploadProfile();
     }
     SheetManager.hide(SHEETS.CameraAndGalleryOption);
   };
 
   const handleUploadProfile = async () => {
+    if (!user?._id) {
+      Alert.alert('Error', 'User not loaded yet');
+      return;
+    }
     try {
-      const payload = profilePhotoUri;
-      const res = await api_updateProfile(user.id, payload);
-      console.log({res}, 'Updated Profile Photo');
-      dispatch(updateUser(res.data));
+      const res = await api_updateProfile(user._id, profilePhotoUri);
+      dispatch(updateUser({ profilePhoto: res.data.profilePhoto }));
+      Alert.alert('Success', 'Profile photo updated!');
     } catch (error: any) {
       console.log(error);
-      Alert.alert('Alert', error.message);
+      Alert.alert('Error', error.message || 'Failed to update profile photo');
     }
   };
-  console.log({profilePhotoUri}, 'Photo');
-
-  React.useEffect(() => {
-    const init = async () => {
-      try {
-        const res = await checkRememberMe();
-        if (!res) return;
-        setDefaultVal(res);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const init2 = async () => {
-      await AsyncStorage.setItem(
-        LOCAL_KEYS.IS_FIRST_TIME_OPEN,
-        JSON.stringify(false),
-      );
-      console.log('IS FIRST TIME SET TO FALSE');
-    };
-
-    init();
-    init2();
-  }, []);
 
   return (
     <MainLayout
       onBack={navigation.goBack}
       title="Profile"
-      rightSideIcon={() => {
-        return (
-          <AntDesign
-            onPress={() => navigation.navigate('Settings')}
-            name="setting"
-            size={30}
-            color="black"
-          />
-        );
-      }}>
-      <View>
+      rightSideIcon={() => (
+        <AntDesign
+          onPress={() => navigation.navigate('Settings')}
+          name="setting"
+          size={30}
+          color="black"
+        />
+      )}
+    >
+      <ScrollView>
+        {/* Profile Photo */}
         <View style={styles.imgView}>
-          {profilePhotoUri ? (
-            <Image style={styles.img} source={{uri: profilePhotoUri}} />
-          ) : (
-            <Image style={styles.img} source={{uri: IMAGE_URI}} />
-          )}
+          <Image style={styles.img} source={{ uri: profilePhotoUri }} />
         </View>
         <View style={styles.cameraBtn}>
           <Feather
-            onPress={() => {
+            onPress={() =>
               SheetManager.show(SHEETS.CameraAndGalleryOption, {
-                payload: {openCamera, openGallery, closeSheet},
-              });
-            }}
+                //@ts-ignore
+                payload: { openCamera, openGallery, closeSheet },
+              })
+            }
             name="camera"
             size={18}
             color={COLORS.secondary}
           />
         </View>
 
-        <View style={[styles.onlineStatus, {width: 85, gap: 0}]}>
+        {/* Online Status */}
+        <View style={[styles.onlineStatus, { width: 85, gap: 0 }]}>
           <Entypo name="dot-single" size={30} color="#02BC49" />
-          <Text style={{color: '#02BC49', marginRight: 5}}>Online</Text>
+          <Text style={{ color: '#02BC49', marginRight: 5 }}>Online</Text>
         </View>
-        <BigText bold style={{textAlign: 'center'}}>
-          John Deo
+
+        {/* Name */}
+        <BigText bold style={{ textAlign: 'center' }}>
+          {user?.name ?? 'Not provided'}
         </BigText>
+
+        {/* Profession / Occupation and Share */}
         <View
           style={{
             flexDirection: 'row',
@@ -172,30 +146,36 @@ const ProfileScreen = () => {
             alignItems: 'center',
             justifyContent: 'center',
             marginBottom: 20,
-          }}>
-          <RegularText style={{color: 'gray'}}>Software engineer</RegularText>
+          }}
+        >
+          <RegularText style={{ color: 'grey' }}>
+            {user?.profession ?? user?.occupation ?? 'Not provided'}
+          </RegularText>
+
           <Octicons
-            style={{marginLeft: 15}}
+            style={{ marginLeft: 15 }}
             name="share"
             size={24}
             color={COLORS.lightBlue}
           />
           <TouchableOpacity onPress={onShare}>
-            <RegularText style={{color: COLORS.lightBlue}}>
-              Share profile
-            </RegularText>
+            <RegularText style={{ color: COLORS.lightBlue }}>Share profile</RegularText>
           </TouchableOpacity>
         </View>
+
+        {/* Upgrade Button */}
         <TouchableOpacity
           //@ts-ignore
           onPress={() => navigation.navigate('PremiumTab')}
-          style={styles.onlineStatus}>
+          style={styles.onlineStatus}
+        >
           <Foundation name="crown" size={24} color="#F9A000" />
-          <Text style={{color: '#F9A000'}}>Upgrade</Text>
+          <Text style={{ color: '#F9A000' }}>Upgrade</Text>
         </TouchableOpacity>
 
+        {/* About Section */}
         <About />
-      </View>
+        </ScrollView>
     </MainLayout>
   );
 };

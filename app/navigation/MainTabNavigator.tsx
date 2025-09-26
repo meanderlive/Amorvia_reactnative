@@ -29,7 +29,7 @@ const MainTabNavigator = () => {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          ...styles.tabBarStyle,
+          ...styles.tabBarStyle, 
         },
       }}>
       <MainTab.Screen
@@ -110,6 +110,9 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: 35,
     borderTopRightRadius: 35,
     padding: 20,
-    height: 90,
+    paddingTop: 20,
+    height: 80,
+    alignItems:'center',
+    justifyContent:'center'
   },
 });

@@ -16,12 +16,23 @@ import { COLORS } from '../../../styles';
 import OtpInputs from 'react-native-otp-inputs';
 import { api_otpVerify } from '../../../api/auth';
 import Toast from 'react-native-toast-message';
+<<<<<<< Updated upstream
 
 const CodeVerifyScreen = () => {
   const [loading, setLoading] = React.useState(false);
   const [screenOtp, setscreenOtp] = useState('');
   const { otp, token } = useRoute<any>().params;
   console.log(otp, token )
+=======
+import { useDispatch } from 'react-redux';
+import { setAuth } from '../../../redux/feature/auth/authSlice';
+
+const CodeVerifyScreen = () => {
+  const [loading, setLoading] = useState(false);
+  const [screenOtp, setScreenOtp] = useState('');
+  const { otp, token } = useRoute<any>().params;
+  const dispatch = useDispatch();
+>>>>>>> Stashed changes
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
 
@@ -45,14 +56,54 @@ const CodeVerifyScreen = () => {
 
     try {
       console.log('Verifying OTP...');
+<<<<<<< Updated upstream
       const res = await api_otpVerify(screenOtp, token);
       console.log('Verify OTP API response:', res.data);
       //@ts-ignore
       navigation.navigate('Welcome',{res:res});
       Alert.alert('Success', 'OTP verified successfully!');
+=======
+      const response = await api_otpVerify(screenOtp, token);
+      console.log('Verify OTP API response:', response);
+
+      if (response.isSuccess) {
+        // Safely extract the user object
+        const userPayload = response.data?.data || response.data || {};
+
+        const userData = {
+          _id: userPayload._id || '',
+          email: userPayload.email || '',
+          name: userPayload.name || '',
+          mode: userPayload.mode || '659436bcacc570d6b14edf41',
+          ...userPayload,
+        };
+
+        // Dispatch to Redux
+        dispatch(
+          setAuth({
+            user: userData,
+            token: userPayload.token || token,
+          })
+        );
+
+        // Navigate to Welcome screen with correct user data
+        navigation.navigate('Welcome', {
+          finalPayload: {
+            ...userData,
+            token: userPayload.token || token,
+            userName: userData.name || '',
+          },
+        });
+      } else {
+        throw new Error(response.message || 'OTP verification failed');
+      }
+>>>>>>> Stashed changes
     } catch (error: any) {
-      console.log(error);
-      Alert.alert('Error', error.message || 'Something went wrong!');
+      console.error('OTP verification error:', error);
+      Alert.alert(
+        'Error',
+        error.message || 'Failed to verify OTP. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
@@ -66,7 +117,11 @@ const CodeVerifyScreen = () => {
             style={{
               flexDirection: 'row',
               alignSelf: 'center',
+<<<<<<< Updated upstream
               marginTop:60
+=======
+              marginTop: 60,
+>>>>>>> Stashed changes
             }}
             autofillFromClipboard={false}
             inputStyles={{
@@ -79,7 +134,7 @@ const CodeVerifyScreen = () => {
               borderRadius: 10,
               marginTop: 20,
             }}
-            handleChange={code => setscreenOtp(code)}
+            handleChange={code => setScreenOtp(code)}
             numberOfInputs={4}
           />
           <RegularText
@@ -106,9 +161,7 @@ const CodeVerifyScreen = () => {
               borderColor: COLORS.secondary,
             }}
           >
-            <RegularText style={{ color: COLORS.secondary }}>
-              Resend
-            </RegularText>
+            <RegularText style={{ color: COLORS.secondary }}>Resend</RegularText>
           </TouchableOpacity>
         </ScrollView>
         <View style={{ marginBottom: 20 }}>

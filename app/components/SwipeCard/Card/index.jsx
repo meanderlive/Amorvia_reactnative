@@ -15,7 +15,6 @@ import MaybeSvg from '../assets/maybe.svg';
 import CrossSvg from '../assets/cross.svg';
 import {styles} from './styles';
 import InfoBox from '../InfoBox';
-import {useNavigation} from '@react-navigation/native';
 const {width, height} = Dimensions.get('screen');
 
 export default function Card({

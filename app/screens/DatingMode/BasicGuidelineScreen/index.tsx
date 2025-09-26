@@ -6,8 +6,11 @@ import PrimaryBtn from '../../../components/PrimaryBtn';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParams } from '../../../navigation/types';
+<<<<<<< Updated upstream
 import { useDispatch } from 'react-redux';
 import { setAuth } from '../../../redux/feature/auth/authSlice';
+=======
+>>>>>>> Stashed changes
 
 type BasicGuidelinesScreenRouteProp = RouteProp<
   RootStackParams,
@@ -17,6 +20,7 @@ type BasicGuidelinesScreenRouteProp = RouteProp<
 const BasicGuidelinesScreen = () => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParams>>();
+<<<<<<< Updated upstream
   const dispatch = useDispatch();
   const route = useRoute<BasicGuidelinesScreenRouteProp>();
   const { userName, token } = route.params;
@@ -31,6 +35,21 @@ const BasicGuidelinesScreen = () => {
     );
     } else {
    Alert.alert("We CANT LOGIN BECAUSE THERE IS AN ISSUE ")
+=======
+  const route = useRoute<BasicGuidelinesScreenRouteProp>();
+  const { userName, token, userData } = route.params;
+
+  const handleSubmit = async () => {
+    try {
+      // Just navigate to MainTab - auth state is already set in CodeVerifyScreen
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'MainTab' }],
+      });
+    } catch (error) {
+      console.error('Navigation error:', error);
+      Alert.alert('Error', 'Failed to navigate to the main screen');
+>>>>>>> Stashed changes
     }
   };
   return (

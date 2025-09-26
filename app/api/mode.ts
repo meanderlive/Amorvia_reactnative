@@ -4,6 +4,7 @@ import { BASE_URL } from ".";
 
 
 export const api_getModeByID = async (Id:any) => {
+  // const uri = `${BASE_URL}/modes/getById/${Id}`;
   const uri = `${BASE_URL}/modes/getById/${Id}`;
   
   const response = await fetch(uri, {
